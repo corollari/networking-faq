@@ -39,16 +39,29 @@ Depèn del sistema físic sobre el que estigui montada la xarxa:
 
 5. Dibuixa un diagrama de temps on es vegin dos hosts diferents afegint-se a un grup, elrouter multicast fent el polling i els hosts deixant el grup.
 
-
+Host A -> Adreça IP del grup : JOIN
+Host B -> Adreça IP del grup : JOIN
+Router -> Adreça IP multicast de tots els hosts de la xarxa : Polling
+Host A o B (el qué hagi  obtinugt un temps aleatori més curt) -> Adreça IP del grup : Pertinença
+Més tard:
+Host A -> Adreça IP del grup : LEAVE
+Host B -> Adreça IP del grup : LEAVE
+Enviat immediatament després del segon LEAVE:
+Router -> Adreça IP multicast de tots els hosts de la xarxa : Polling
+Ningú respón i el router elimina les dades que tenia sobre el grup i, en cas d'estar a RPM informa a altres routers de la extinció del grup a la seva xarxa.
 
 6. Hi ha manera de fer multicasting IP entre xarxes diferents (p.e. a Internet) si no tenimrouters multicast a totes les xarxes intermitjes?
 
-
+No, per que els routers de les xarxes intermitges no sabran com enrutar els paquets multicast.
 
 7. Si el hardware de xarxa no suporta multicast, podem utilitzar multicast IP? Com? Quineslimitacions comportarà això?
 
-
+En aquest cap podem enviar paquets multicast IP (ja que només requereixen canviar l'adreça IP de destinatari) però no en podem rebre (que requereix de hardware amb suport per multicast).
 
 8. A IGMP, què passa si es perd una resposta (del polling) d’un host? I si es perd una peticiód’enquesta?
 
+Si es perd una resposta de polling poden passar dos coses:
+- El host que ha enviat la resposta és l'únic host del grup que es troba a la xarxa. Llavors el servidor assumeix que com no ha contestat ningú es que no hi ha hosts subscrits a aquest grup a la xarxa i elimina les dades que té del grup, tancant-lo.
+- Hi ha més hosts subscrits al grup multicast dins de la mateix xarxa. En aquest cas els altres hosts veuran que no s'ha respost el missatge i quan passi el seu delay de contestar (seleccionat aleatoriament) contestaran al router, obtenint el mateix comportament final que s'hagués obtingut si el paquet no s'hagués perdut.
 
+Si es perd la petició d'enquesta els hosts no ho veuran i no contestaràn. El router, que no sap que el seu paquet s'ha perdut, considerarà la situació com que no hi ha cap host subscrit al grup en la seva xarxa i tancarà el grup.
