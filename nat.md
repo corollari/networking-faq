@@ -1,12 +1,37 @@
-1. Comenta les restriccions que tindran tres xarxes amb espais d’adreçament diferents con-nectades, de manera asimètrica, a través de dos routers fent NAT d’origen i NAT de des-tinació. Quantes vegades es traduiran les adreces de destinació? I les d’origen? Com faSkype, per exemple, per a connectar dos interlocutors que estan darerra de NAT?
+1. Comenta les restriccions que tindran tres xarxes amb espais d’adreçament diferents connectades, de manera asimètrica, a través de dos routers fent NAT d’origen i NAT de destinació. Quantes vegades es traduiran les adreces de destinació? I les d’origen? Com fa Skype, per exemple, per a connectar dos interlocutors que estan darerra de NAT?
+
+
+
 2. Imagina que construïm una internet paralel.la a la Internet, que utilitzés el seu mateix espaid’adreçament. Podríem utilitzar NAT per interconnectar-les, considerant que totes duessón arbitràriament grans? Es podria fer un túnel d’un host de la internet a un host dela Internet? Raona les teves respostes. Es possible superar la limitació d’adreces IPv4utilitzant NAT? Fins a quin punt és escalable aquesta solució?
-3. Tenim una xarxa privada amb un servidor (192.168.2.2). El nostre router fa NAT (SNAT) ia més permet l’accés des d’Internet (els datagrames al port 22 seran re-encaminats al port
-122 del servidor intern (DNAT)). Mostra el contingut de la taula NAT després que a) unclient s’hagi connectat des d’Internet. b) un altre client, amb el mateix port, s’hagi connec-tat des d’Internet. c) el primer client, des d’un port diferent, s’hagi tornat a connectar. Pertots els casos mostra també les connexions tal com les veuen client, servidor i router (fentun netstat, per exemple). Hi hauria algun problema si el servei ofert per aquest port 22és SSH?
+
+
+
+3. Tenim una xarxa privada amb un servidor (192.168.2.2). El nostre router fa NAT (SNAT) ia més permet l’accés des d’Internet (els datagrames al port 22 seran re-encaminats al port 122 del servidor intern (DNAT)). Mostra el contingut de la taula NAT després que a) unclient s’hagi connectat des d’Internet. b) un altre client, amb el mateix port, s’hagi connec-tat des d’Internet. c) el primer client, des d’un port diferent, s’hagi tornat a connectar. Pertots els casos mostra també les connexions tal com les veuen client, servidor i router (fentun netstat, per exemple). Hi hauria algun problema si el servei ofert per aquest port 22és SSH?
 4. En el mateix escenari del problema anterior, suposa que tenim dos hosts interns més ambaquests casos: a) tots dos hosts accedeixen al mateix servidor extern utilitzant ports localsdiferents. b) igual que abans, però utilitzant el mateix port local. c) el mateix host intern,des de ports locals diferent, es connecta al mateix servidor, mateix port, d’Internet. Mostrala taula de NAT i les connexions a tots els hosts i al router en cadascun dels casos (el quemostraria un netstat, per exemple). Hi hauria algun problema si el servei extern és FTPen mode actiu?
+
+
+
 5. Podríem connectar xarxes privades diferents (p.e. Ethernet i ATM) utilitzant els conceptesbàsics del VPN? I si fosin del mateix tipus? Existeix alguna proposta que faci alguna cosasemblant? Raona la resposta, i comenta les limitacions que tindria una xarxa d’aquesttipus.
 6. Suposa que els routers que han d’establir un túnel entre dues xarxes d’una mateixa VPNnomés tenen una adreça IP associada a la interfície externa i cap per la interna (la interfícieinterna no té associat ni tan se vol protocol IP). Creus que seria tècnicament possible lainterconnexió dels segments? En aquest cas, com serien els datagrames que circularien perInternet? Quines limitacions i avantatges tindria aquest esquema?
+
+
+
 7. Tenim necessitat d’interconnectar la nostra VPN (de 200 hosts) a Internet (qualsevol hostintern ha de poder accedir-hi) per tal d’utilitzar un servei que utilitza un protocol quefunciona directament sobre IP. Aquest protocol té un identificador en les capçaleres pera resoldre ambigüitats de fluxos d’informació a nivell d’aplicació. Com faries possibleaquest accés tenint en compte que estadísticament un 2% dels hosts voldran accedir almateix servidor d’Internet simultàniament?
+
+
+
 8. Seria possible combinar un esquema NAT per adreces amb un NAPT per tal d’augmentarel nombre de connexions simultànies entre la xarxa privada i Internet? En cas afirmatiu,quin serà el nombre màxim teòric de connexions tenint en compte els paràmetres de cadaesquema?9. Suposa que un router està fent NAPT bidireccional per a permetre l’accés a un host interndes d’Internet, a més de les connexions en sentit invers. Serà possible que aquest host esconnecti amb si mateix utilitzant l’adreça i port públics que utilitzaran la resta de hosts aInternet? Raona la resposta i explica els detalls d’aquest cas sobre la taula de NAT.
+
+
+
 10. Com podrem interconnectar dues VPNs totalment independents que comparteixen l’espaide direccionament? Quines limitacions tindira l’esquema que proposes? Explica les difer-ències que hi hauria en un cas com aquest el considerar un esquema de VPN d’etiquetes(com MPLS/VPN) respecte un més clàssic d’imbricació (túnels).
+
+
+
 11. Podem tenir una intranet a n nivells (VPNs imbricades). En el nivell més extern, comafecta n en el càlcul del MTU del primer túnel? Quin és, si existeix, el màxim pràctic pera n si volem assegurar un mínim de 476 bytes per datagrama? Realitza els mateix càlculssi en comptes d’imbricació de túnels fessim NAT a n nivells.
+
+
+
 12. Un error de configuració en els routers d’una VPN ens porta a una situació límit. En lafigura les fletxes mostren les entrades de default dels routers, les interficies i0 connectena les xarxes físiques, i les tun0 són túnels. Explica que passa amb un datagrama queenvia 10.2.0.20 a 10.5.0.5 i quina serà la seva situació final. Tingues en compte la sevamida, fragmentació, adreces, ICMP, capa d’aplicacions, etc. Quin penses que és l’error deconfiguració? Com afectaria què els routers senars fessin NAT?
+
+
