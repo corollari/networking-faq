@@ -3,8 +3,6 @@
 L'arquitectura està parcialment inspirada per SSL i TSL (encara que IPsec s'aplica a un layer diferent que aquests).
 L'encriptació i autentificació utilitzada en IPsec està basada en protocols críptogràfics símetrics (per l'encriptació) i asímetrics (utilitzats en l'intercanvi Diffie-Hellman i l'autentificació).
 
-- IKE
-
 2. Suposa que un datagrama IP entra en un túnel IPSec. Escriu les seves capçaleres si s’està utilitzant:
 - a) Només autenticació (AH)
 - b) Autenticació i xifrat (AH+ESP)
