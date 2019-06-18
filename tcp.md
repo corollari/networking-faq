@@ -64,7 +64,8 @@ No hi ha suficients dades com per decidir a partir de quin RTT seria millor esca
 
 9. Seria possible tenir TCP per sobre d’Ethernet directament, sense utilitzar IP? I tenir TCPsobre un altre TCP sobre IP (els MSS haurien de ser diferents, és clar)? Raona els motius iles limitacions que trobis en aquestes dues situacions considerant els diferents mecanismesque hem vist al llarg del tema.
 
-
+Seria possible però aquest sistema només funcionaria per a conectar nodes de la xarxa local (ja que com no tenim IP no podem especificar destinari). Això podria servir per eliminar els headers de IP però si només podem comunicarnos per la xarxa local és una mica inutil.
+TCP sobre TCP sobre IP és possible ja que la payload de TCP poden ser dades arbitràries. Pot ser utilitzat per realitzar tunels en sistemes que no deixen passar paquets que no siguin TCP (o paquets que no siguin TCP al port 80) a canvi d'incorrer en un cost més elevat d'enviament (hem d'incloure headers inecessàris).
 
 10. Si estem connectats a Internet utilitzant wireless, i estem descarregant un fitxer gran ambun protocol sobre TCP, explica quin efecte sobre el throughput tindrà embolicar l’antenadurant exactament un minut i mig amb un troç de paper de plata connectat a terra. Tinguesen compte els diferents mecanismes que utilitza TCP. Podries quantificar d’alguna manera(encara que sigui aproximadament) la pèrdua de throughput ocasionada per aquest event?Com es podria minimitzar?
 
