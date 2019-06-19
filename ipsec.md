@@ -13,11 +13,13 @@ L'encriptació i autentificació utilitzada en IPsec està basada en protocols c
 |Capçalera IP | Capçalera AH | Contingut |
 +-------------+--------------+----------+
 **AH+ESP**:
-+--
-|Capçalera IP | Capçalera ESP | Capçalera AH | Contingut | Cua ESP |
-+--
++-------------+--------------+---------------+-----------+---------+
+|Capçalera IP | Capçalera AH | Capçalera ESP | Contingut | Cua ESP |
++-------------+--------------+---------------+-----------+---------+
 **ESP**:
-
++-------------+---------------+-----------+---------+
+|Capçalera IP | Capçalera ESP | Contingut | Cua ESP |
++-------------+---------------+-----------+---------+
 
 3. De quina manera es preserva l’identificador del protocol en el payload del datagrama quan afegim les capçaleres d’AH i d’ESP?
 
@@ -29,9 +31,11 @@ Per a saber quina es la security association que s'ha d'utilitzar per desencript
 
 5. En quines situacions utilitzaries SSL i en quines IP Sec? Penses que el servei de WWW del’Autònoma podria oferir-se amb IP Sec? Comenta totes les implicacions que comportaria.
 
-Utilitzaria SSL quan 
-El servei de l'Autònoma no es podria oferir amb IPSec perquè això requeriria que tots els seus usuaris haguessin definit previament les security associations necessàries per poder establir comunicació IPSec.
+Utilitzaria SSL quan volgués autentificar i encriptar el contingut dels paquets enviats a internet enviats o rebuts per qualsevol altre host d'internet. En canvi, utilitzaria IPSec quan volgués encriptar i autentificar els paquets sencers (no només el contigut) dels paquets enviats entre hosts que controlés jo (perquè hauria de crear les SA necessàries).
+El servei de l'Autònoma no es podria oferir un servei web amb IPSec perquè això requeriria que tots els seus usuaris haguessin definit previament les security associations necessàries per poder establir comunicació IPSec.
 
 6. Quines implicacions funcionals té el blocat de datagrames efectuat per un firewall en escenaris on tinguem: a) Multicast, b) VPN/NAT, c) IP Sec.
 
-
+a) Els firewalls no bloquejen multicast.
+b) Els NAT solen aplicar un firewall íntrinsec al ser SNAT (quasi tots els NAT a internet són SNAT) el qual bloqueja totes les conexions que no siguin iniciades per a hosts de dins de la xarxa.
+c) Molts firewalls només deixen passar certs protocols amb certs ports concrets (especialment molt firewalls només deixen TCP amb els ports 80 i 443 per tal de només deixar passar comunicacions web) de manera que els paquets IPsec quedarien bloquejats pel firewall.
