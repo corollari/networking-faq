@@ -80,8 +80,13 @@ TCP sobre TCP sobre IP és possible ja que la payload de TCP poden ser dades arb
 Es perdria tota la informació que s'hagués pogut enviar durant el minut i mig a la velocitat, i, a més la pérdua de paquets activaria el mecanisme de congestió de TCP implementat en el sistema, que al fallar també acabaria portant la finestra a la mida mínima. Finalment el temps de timeout dels paquets augmentaria de forma massiva.
 Tot aixó portaria a que després de retirar el paper de plata de l'antena 
 
-#### 11. Quines són les diferències i semblances entre el backoff del timeout de l’algorisme deKarn, el timeout del mecanisme de KeepAlive, i el timer de persistència amb backoff deles emissions en finestra zero del protocol TCP? Per a cada cas, detalla també quin ésel problema que volen solucionar, com funcionen, i quin impacte tenen en el throughputglobal de TCP.
+#### 11. Quines són les diferències i semblances entre el backoff del timeout de l’algorisme de Karn, el timeout del mecanisme de Keep Alive, i el timer de persistència amb backoff de les emissions en finestra zero del protocol TCP? Per a cada cas, detalla també quin és el problema que volen solucionar, com funcionen, i quin impacte tenen en el throughput global de TCP.
 
+**Backoff de Karn**: Soluciona el problema del càlcul del timeout en conexions TCP. Funciona a base d'incrementar el timeout exponencialment (multiplicant per 2) cada vegada que el timeout s'activa. Incrementa el throughput del TCP comparat amb utilitzar un timeout constant perquè s'adapta a les condicions actuals de la conexió TCP.
+
+**Keep Alive**: Soluciona el problema de conexions TCP que es mantenen obertes quan realment el receptor ja les ha tancat o ha desaparegut. Funciona enviant paquets en la conexió períodicament per tal de comprovar si el receptor contesta. En cas de que el receptor no contesti al primer paquet es van enviant més cada €x€ segons, on €x€ incrementa exponencialment. No afecta al throughput del TCP.
+
+**Timer de persitència**: Soluciona el problema donat per la possibilitat de creació de deadlocks en una conexió TCP causades per un receptor anunciant una finestra de 0 i l'altre costat no responent amb cap més missatge (perquè la finestra seria de 0). Funciona a base d'enviar un paquet cada €min(5, 1.5*2^n)€ segons, on n es va incrementant a cada enviament de paquet mentres la finestra es manté a 0. Tècnicament disminueix una mica el throughput ja que fa que s'enviin paquets que no són estrictament necessàries, però aquesta disminució es negligible perquè l'activació d'aquest timer es molt poc comuna.
 
 # NAT
 
@@ -149,14 +154,14 @@ a)
 
 | IP extern          | Port extern      | IP interna | Port intern | Protocol | Port NAT extern |Port NAT intern     |
 |--------------------|-----------------|------------|-------------|----------|-----------------|--------------------|
-| IP servidor extern |Port servei extern| IP host 1  | Port host 1 | TCP/UDP  | Port_NAT_1      | Port servei extern |
-| IP servidor extern |Port servei extern| IP host 2  | Port host 2 | TCP/UDP  | Port_NAT_2      | Port servei extern |
+| IP servidor extern |Port servei extern| IP host 1  | Port host 1 | TCP o UDP| Port NAT 1      | Port servei extern |
+| IP servidor extern |Port servei extern| IP host 2  | Port host 2 | TCP o UDP| Port NAT 2      | Port servei extern |
 
 Host: Conexió TCP entre `IP host 1`:`Port host 1` i `IP servidor extern`:`Port servei extern`
-Servidor: Conexió TCP entre `IP externa NAT`:`Port_NAT_1` i `IP servidor extern`:`Port servei extern`
+Servidor: Conexió TCP entre `IP externa NAT`:`Port NAT 1` i `IP servidor extern`:`Port servei extern`
 NAT:
 - Conexió TCP entre `IP host 1`:`Port host 1` i `IP servidor extern`:`Port servei extern`
-- Conexió TCP entre `IP externa NAT`:`Port_NAT_1` i `IP servidor extern`:`Port servei extern`
+- Conexió TCP entre `IP externa NAT`:`Port NAT 1` i `IP servidor extern`:`Port servei extern`
 
 Pel host 2 és quasi tot igual.
 
@@ -164,14 +169,14 @@ b)
 
 | IP extern          | Port extern      | IP interna | Port intern | Protocol | Port NAT extern |Port NAT intern     |
 |--------------------|-----------------|------------|-------------|----------|-----------------|--------------------|
-| IP servidor extern |Port servei extern| IP host 1  | Port host 1 | TCP/UDP  | Port_NAT_1      | Port servei extern |
-| IP servidor extern |Port servei extern| IP host 2  | Port host 1 | TCP/UDP  | Port_NAT_2      | Port servei extern |
+| IP servidor extern |Port servei extern| IP host 1  | Port host 1 | TCP o UDP| Port NAT 1      | Port servei extern |
+| IP servidor extern |Port servei extern| IP host 2  | Port host 1 | TCP o UDP| Port NAT 2      | Port servei extern |
 
 Host: Conexió TCP entre `IP host 1`:`Port host 1` i `IP servidor extern`:`Port servei extern`
-Servidor: Conexió TCP entre `IP externa NAT`:`Port_NAT_1` i `IP servidor extern`:`Port servei extern`
+Servidor: Conexió TCP entre `IP externa NAT`:`Port NAT 1` i `IP servidor extern`:`Port servei extern`
 NAT:
 - Conexió TCP entre `IP host 1`:`Port host 1` i `IP servidor extern`:`Port servei extern`
-- Conexió TCP entre `IP externa NAT`:`Port_NAT_1` i `IP servidor extern`:`Port servei extern`
+- Conexió TCP entre `IP externa NAT`:`Port NAT 1` i `IP servidor extern`:`Port servei extern`
 
 Aquestes connexions NAT no funcionaràn a no ser que el NAT utilitzi alguna tècnica complexa per l'enrutament, com, per exemple, alguna basada en els números de seqüencia, la qual pot fallar també.
 
@@ -179,14 +184,14 @@ c)
 
 | IP extern          | Port extern      | IP interna | Port intern   | Protocol | Port NAT extern |Port NAT intern     |
 |--------------------|-----------------|------------|---------------|----------|-----------------|--------------------|
-| IP servidor extern |Port servei extern| IP host 1  | Port host 1.a | TCP/UDP  | Port_NAT_1      | Port servei extern |
-| IP servidor extern |Port servei extern| IP host 1  | Port host 1.b | TCP/UDP  | Port_NAT_2      | Port servei extern |
+| IP servidor extern |Port servei extern| IP host 1  | Port host 1.a | TCP o UDP| Port NAT 1      | Port servei extern |
+| IP servidor extern |Port servei extern| IP host 1  | Port host 1.b | TCP o UDP| Port NAT 2      | Port servei extern |
 
 Host: Conexió TCP entre `IP host 1`:`Port host 1` i `IP servidor extern`:`Port servei extern`
-Servidor: Conexió TCP entre `IP externa NAT`:`Port_NAT_1` i `IP servidor extern`:`Port servei extern`
+Servidor: Conexió TCP entre `IP externa NAT`:`Port NAT 1` i `IP servidor extern`:`Port servei extern`
 NAT:
 - Conexió TCP entre `IP host 1`:`Port host 1` i `IP servidor extern`:`Port servei extern`
-- Conexió TCP entre `IP externa NAT`:`Port_NAT_1` i `IP servidor extern`:`Port servei extern`
+- Conexió TCP entre `IP externa NAT`:`Port NAT 1` i `IP servidor extern`:`Port servei extern`
 
 **Hi hauria algun problema si el servei extern és FTP en mode actiu?** Sí, que quan FTP transferís el nombre de port a través del qual vol fer la transferència el servidor s'intentaria conectar a aquest port del NAT, però el NAT refusaria la conexió perquè no tindria aquest port registrat a la seva taula.
 
@@ -227,8 +232,8 @@ Taula NAT:
 
 | IP extern          | Port extern         | IP interna | Port intern          | Protocol | Port NAT extern |Port NAT intern       |
 |--------------------|---------------------|------------|----------------------|----------|-----------------|----------------------|
-| IP NAT             | Port associat a host| IP host    | Port host            | TCP/UDP  | Port_NAT_1      | Port associat a host |
-| IP NAT             | Port_NAT_1          | IP host    | Port associat a host | TCP/UDP  | Port_NAT_1      | Port_NAT_2           |
+| IP NAT             | Port associat a host| IP host    | Port host            | TCP o UDP| Port NAT 1      | Port associat a host |
+| IP NAT             | Port NAT 1          | IP host    | Port associat a host | TCP o UDP| Port NAT 1      | Port NAT 2           |
 
 #### 10. Com podrem interconnectar dues VPNs totalment independents que comparteixen l’espaide direccionament? Quines limitacions tindira l’esquema que proposes? Explica les difer-ències que hi hauria en un cas com aquest el considerar un esquema de VPN d’etiquetes(com MPLS/VPN) respecte un més clàssic d’imbricació (túnels).
 
@@ -271,12 +276,14 @@ Destinació IP: 160.231.5.69
 #### 2. A quin rang d’adreces IP multicast li correspon l’adreça Ethernet 01:00:5E:00:01:02? I a 01:00:5E:A5:CB:D2?
 
 +------------------+-------------------------------------+
-| Ethernet         | IPs                                 |
+| Ethernet         | IPs (en binari)                     |
 +------------------+-------------------------------------+
 |01:00:5E:00:01:02 | 1110****.*0000000.00000001.00000010 |
 +------------------+-------------------------------------+
 |01:00:5E:A5:CB:D2 | 1110****.*0100101.11001011.11010010 |
 +------------------+-------------------------------------+
+
+Els `*` marquen bits que podrien ser tant zeros com uns.
 
 #### 3. A quants grups multicast pot afegir-se una interfície de xarxa sense repetir cap adreçaEthernet?
 
@@ -453,9 +460,9 @@ L'arquitectura està parcialment inspirada per SSL i TSL (encara que IPsec s'apl
 L'encriptació i autentificació utilitzada en IPsec està basada en protocols críptogràfics símetrics (per l'encriptació) i asímetrics (utilitzats en l'intercanvi Diffie-Hellman i l'autentificació).
 
 #### 2. Suposa que un datagrama IP entra en un túnel IPSec. Escriu les seves capçaleres si s’està utilitzant:
-- a) Només autenticació (AH)
-- b) Autenticació i xifrat (AH+ESP)
-- c) Només xifrat (ESP)
+**a) Només autenticació (AH)**
+**b) Autenticació i xifrat (AH+ESP)**
+**c) Només xifrat (ESP)**
 
 **AH**:
 
