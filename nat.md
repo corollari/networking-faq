@@ -1,3 +1,5 @@
+# NAT
+
 1. Comenta les restriccions que tindran tres xarxes amb espais d’adreçament diferents connectades, de manera asimètrica, a través de dos routers fent NAT d’origen i NAT de destinació. Quantes vegades es traduiran les adreces de destinació? I les d’origen? Com fa Skype, per exemple, per a connectar dos interlocutors que estan darerra de NAT?
 
 Les limitacions (apart de les limitacions inherents de NAT) seràn que només els hosts d'una xarxa podran iniciar conexions amb els hosts de l'altra xarxa.

@@ -1,3 +1,5 @@
+# Multicast
+
 1. Un servidor, amb adreça IP 160.231.5.69, envia datagrames al grup de multicast 230.5.16.15.L’adreça MAC del servidor és 00:00:1B:3E:99:F0. Escriu les adreces IP i MAC d’origeni destinació dels datagrames que envia el servidor. Fes el mateix amb la resposta d’unmembre del grup.
 
 Paquet del servidor:

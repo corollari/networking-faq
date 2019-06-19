@@ -1,3 +1,5 @@
+# IPv6
+
 1. Compara les capçaleres de IP versió 4 i 6. Quins camps ja no hi són? Quins s’han mantingut? Quins han canviat de nom o han canviat la seva semàntica?
 
 - TTL passa a ser Hop Limit

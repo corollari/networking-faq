@@ -1,3 +1,5 @@
+# TCP
+
 1. Per tal de reduir la congestió, quines diferències veus, a tots els nivells, entre l’aplicació de l’algorisme de van Jacobson i la utilització d’una política de gestió de cues RED? De quina manera podem relacionar la política SFQ amb l’algorisme de Karn (en el sentit de si són totalment independents, o l’un millora/altera l’altre)?
 
 L'algoritme de van Jacobson permet als hosts respondre més ràpidament a canvis en la congestió. Aquesta adaptació ràpida millora els resultats obtinguts amb RED perquè fa que quan la cua es començi a emplenar els hosts i els paquets s'eliminin els hosts reaccionin depressa i enviin menys paquets i disminueixi ràpidament la congestió.
